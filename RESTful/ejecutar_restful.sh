@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
-./gradlew build
+gradle clean build
 
-java -jar build/libs/RESTful-0.0.1-SNAPSHOT.jar
+# rationale: Wait for postgres container to become available
+# link: https://cstan.io/?p=8620&lang=en
+printf "Wait a moment while loading the database."
+while ! PGPASSWORD='postgres' psql -h postgres -U postgres -p 5432 -l &> /dev/null
+do
+  printf "."
+  sleep 2
+done
+printf "\n"
+
+java -jar build/libs/*.jar
