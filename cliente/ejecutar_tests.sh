@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
-python3 script.py < input > salida1
-python3 script.py < input2 > salida2
-md5sum -c salidaesperada.md5sum
+port=8080
+link="http://apirest:$port"
+printf "Wait a moment while loading api restful."
+while ! curl "$link" &> /dev/null
+do
+  printf "."
+  sleep 2
+done
+printf "\n"
+
+python3 script.py < entrada1 > salida1
+python3 script.py < entrada2 > salida2
+md5sum -c salidaesperada.checksum
