@@ -1,0 +1,27 @@
+version: '3.1'
+services:
+  tests:
+    build: ./cliente
+    tty: true
+    volumes:
+      - ./cliente:/app
+    depends_on:
+      - apirest
+    command: /app/ejecutar_tests.sh
+  apirest:
+    build: ./RESTful
+    volumes:
+      - ./RESTful:/app
+    depends_on:
+      - postgres
+    command: /app/ejecutar_restful.sh
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+  #adminer:
+  #  image: adminer
+  #  restart: always
+  #  ports:
+  #    - 8080:8080
